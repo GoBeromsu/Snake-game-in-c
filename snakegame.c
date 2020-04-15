@@ -16,14 +16,14 @@
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
 
-int x[100], y[100]; //x,y ÁÂÇ¥°ªÀ» ÀúÀå ÃÑ 100°³ 
+int x[100], y[100]; //x,y ì¢Œí‘œê°’ì„ ì €ì¥ ì´ 100ê°œ 
 
-int length; //¸ö±æÀÌ¸¦ ±â¾ï 
-int speed; //°ÔÀÓ ¼Óµµ 
-int score; //Á¡¼ö ÀúÀå  --resetÇÔ¼ö¿¡ ÀÇÇØ ÃÊ±âÈ­µÊ
+int length; //ëª¸ê¸¸ì´ë¥¼ ê¸°ì–µ 
+int speed; //ê²Œì„ ì†ë„ 
+int score; //ì ìˆ˜ ì €ì¥  --resetí•¨ìˆ˜ì— ì˜í•´ ì´ˆê¸°í™”ë¨
 int food_x, food_y;
-int dir; //ÀÌµ¿¹æÇâ ÀúÀå 
-int key; //ÀÔ·Â¹ŞÀº Å° ÀúÀå 
+int dir; //ì´ë™ë°©í–¥ ì €ì¥ 
+int key; //ì…ë ¥ë°›ì€ í‚¤ ì €ì¥ 
 int life_count = 3;
 
 void gotoxy(int x, int y,const char* s) { 
@@ -33,27 +33,28 @@ void gotoxy(int x, int y,const char* s) {
 }
 
 void life();
+void life_screen();
 void food();
-void reset(void); //°ÔÀÓÀ» ÃÊ±âÈ­ 
+void reset(void); //ê²Œì„ì„ ì´ˆê¸°í™” 
 void draw_map();
-void move(int dir); //¹ì¸Ó¸®¸¦ ÀÌµ¿ 
+void move(int dir); //ë±€ë¨¸ë¦¬ë¥¼ ì´ë™ 
 
 int main() {
     reset();
 
     while (1) {
-        if (_kbhit()) do { key = _getch(); } while (key == 224); //Å° ÀÔ·Â¹ŞÀ½
+        if (_kbhit()) do { key = _getch(); } while (key == 224); //í‚¤ ì…ë ¥ë°›ìŒ
         Sleep(speed);
 
-        switch (key) { //ÀÔ·Â¹ŞÀº Å°¸¦ ÆÄ¾ÇÇÏ°í ½ÇÇà  
+        switch (key) { //ì…ë ¥ë°›ì€ í‚¤ë¥¼ íŒŒì•…í•˜ê³  ì‹¤í–‰  
         case LEFT:
         case RIGHT:
         case UP:
         case DOWN:
             if ((dir == LEFT && key != RIGHT) || (dir == RIGHT && key != LEFT) || (dir == UP && key != DOWN) ||
-                (dir == DOWN && key != UP))//180È¸ÀüÀÌµ¿À» ¹æÁöÇÏ±â À§ÇØ ÇÊ¿ä. 
+                (dir == DOWN && key != UP))//180íšŒì „ì´ë™ì„ ë°©ì§€í•˜ê¸° ìœ„í•´ í•„ìš”. 
                 dir = key;
-            key = 0; // Å°°ªÀ» ÀúÀåÇÏ´Â ÇÔ¼ö¸¦ reset 
+            key = 0; // í‚¤ê°’ì„ ì €ì¥í•˜ëŠ” í•¨ìˆ˜ë¥¼ reset 
             break;
        
         }
@@ -95,8 +96,9 @@ void reset(void) {
     gotoxy(MAP_X + x[0], MAP_Y + y[0], "e");  
 
     food();
+    life_screen();
 }
-void game_over(void) { //°ÔÀÓÁ¾·á ÇÔ¼ö 
+void game_over(void) { //ê²Œì„ì¢…ë£Œ í•¨ìˆ˜ 
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 5, "+----------------------+");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 6, "|      GAME OVER..     |");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "+----------------------+");
@@ -112,16 +114,16 @@ void game_over(void) { //°ÔÀÓÁ¾·á ÇÔ¼ö
 void move(int dir) {
     int i;
 
-    if (x[0] == food_x && y[0] == food_y) { //food¿Í Ãæµ¹ÇßÀ» °æ¿ì 
-        score += 10; //Á¡¼ö Áõ°¡
+    if (x[0] == food_x && y[0] == food_y) { //foodì™€ ì¶©ëŒí–ˆì„ ê²½ìš° 
+        score += 10; //ì ìˆ˜ ì¦ê°€
         
-        food(); //»õ·Î¿î food Ãß°¡ 
-        length++; //±æÀÌÁõ°¡ 
-        x[length - 1] = x[length - 2]; //»õ·Î¸¸µç ¸öÅë¿¡ °ª ÀÔ·Â 
+        food(); //ìƒˆë¡œìš´ food ì¶”ê°€ 
+        length++; //ê¸¸ì´ì¦ê°€ 
+        x[length - 1] = x[length - 2]; //ìƒˆë¡œë§Œë“  ëª¸í†µì— ê°’ ì…ë ¥ 
         y[length - 1] = y[length - 2];
     }
 
-    for (i = 1; i < length; i++) { //ÀÚ±â¸ö°ú Ãæµ¹Çß´ÂÁö °Ë»ç 
+    for (i = 1; i < length; i++) { //ìê¸°ëª¸ê³¼ ì¶©ëŒí–ˆëŠ”ì§€ ê²€ì‚¬ 
         if (x[0] == x[i] && y[0] == y[i]) {
             life();
             return;
@@ -141,7 +143,7 @@ void move(int dir) {
     if (dir == DOWN) ++y[0];
     gotoxy(MAP_X + x[i], MAP_Y + y[i], "e"); 
     
-    if (x[0] == 0 || x[0] == MAP_WIDTH - 1 || y[0] == 0 || y[0] == MAP_HEIGHT - 1) { //º®°ú Ãæµ¹ÇßÀ» °æ¿ì 
+    if (x[0] == 0 || x[0] == MAP_WIDTH - 1 || y[0] == 0 || y[0] == MAP_HEIGHT - 1) { //ë²½ê³¼ ì¶©ëŒí–ˆì„ ê²½ìš° 
         life();
         return;
     }
@@ -152,29 +154,29 @@ void move(int dir) {
 void food(void) {
     int i;
 
-    int food_crush_on = 0;//food°¡ ¹ì ¸öÅëÁÂÇ¥¿¡ »ı±æ °æ¿ì on 
-    int r = 0; //³­¼ö »ı¼º¿¡ »çµ¿µÇ´Â º¯¼ö 
-    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); //Á¡¼öÇ¥½Ã 
+    int food_crush_on = 0;//foodê°€ ë±€ ëª¸í†µì¢Œí‘œì— ìƒê¸¸ ê²½ìš° on 
+    int r = 0; //ë‚œìˆ˜ ìƒì„±ì— ì‚¬ë™ë˜ëŠ” ë³€ìˆ˜ 
+    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); //ì ìˆ˜í‘œì‹œ 
     printf("%d", score);
 
     while (1) {
         food_crush_on = 0;
-        srand((unsigned)time(NULL) + r); //³­¼öÇ¥»ı¼º 
-        food_x = (rand() % (MAP_WIDTH - 2)) + 1;    //³­¼ö¸¦ ÁÂÇ¥°ª¿¡ ³ÖÀ½ 
+        srand((unsigned)time(NULL) + r); //ë‚œìˆ˜í‘œìƒì„± 
+        food_x = (rand() % (MAP_WIDTH - 2)) + 1;    //ë‚œìˆ˜ë¥¼ ì¢Œí‘œê°’ì— ë„£ìŒ 
         food_y = (rand() % (MAP_HEIGHT - 2)) + 1;
 
-        for (i = 0; i < length; i++) { //food°¡ ¹ì ¸öÅë°ú °ãÄ¡´ÂÁö È®ÀÎ  
+        for (i = 0; i < length; i++) { //foodê°€ ë±€ ëª¸í†µê³¼ ê²¹ì¹˜ëŠ”ì§€ í™•ì¸  
             if (food_x == x[i] && food_y == y[i]) {
-                food_crush_on = 1; //°ãÄ¡¸é food_crush_on ¸¦ on 
+                food_crush_on = 1; //ê²¹ì¹˜ë©´ food_crush_on ë¥¼ on 
                 r++;
                 break;
             }
         }
 
-        if (food_crush_on == 1) continue; //°ãÃÆÀ» °æ¿ì while¹®À» ´Ù½Ã ½ÃÀÛ 
+        if (food_crush_on == 1) continue; //ê²¹ì³¤ì„ ê²½ìš° whileë¬¸ì„ ë‹¤ì‹œ ì‹œì‘ 
 
-        gotoxy(MAP_X + food_x, MAP_Y + food_y, "¢Ü"); //¾È°ãÃÆÀ» °æ¿ì ÁÂÇ¥°ª¿¡ food¸¦ Âï°í 
-        speed -= 3; //¼Óµµ Áõ°¡ 
+        gotoxy(MAP_X + food_x, MAP_Y + food_y, "â™ª"); //ì•ˆê²¹ì³¤ì„ ê²½ìš° ì¢Œí‘œê°’ì— foodë¥¼ ì°ê³  
+        speed -= 3; //ì†ë„ ì¦ê°€ 
         break;
 
     }
@@ -186,4 +188,11 @@ void life() {
     if (life_count == 0) {
         game_over();
     }
+}
+
+void life_screen()
+{ 
+	if(life_count==3)	gotoxy(26,22, "LIFE: â™¥â™¥â™¥");
+	if(life_count==2) 	gotoxy(26,22, "LIFE: â™¥â™¥â™¡");
+	if(life_count==1) 	gotoxy(26,22, "LIFE: â™¥â™¡â™¡");
 }
