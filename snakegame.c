@@ -24,6 +24,7 @@ int score; //점수 저장  --reset함수에 의해 초기화됨
 int food_x, food_y;
 int dir; //이동방향 저장 
 int key; //입력받은 키 저장 
+int life_count = 3;
 
 void gotoxy(int x, int y,const char* s) { 
     COORD pos = { 2*x,y };
@@ -31,11 +32,11 @@ void gotoxy(int x, int y,const char* s) {
     printf("%s", s);
 }
 
+void life();
 void food();
 void reset(void); //게임을 초기화 
 void draw_map();
 void move(int dir); //뱀머리를 이동 
-
 
 int main() {
     reset();
@@ -58,7 +59,6 @@ int main() {
         }
         move(dir);
 
-       
     }
 }
 
@@ -113,7 +113,8 @@ void move(int dir) {
     int i;
 
     if (x[0] == food_x && y[0] == food_y) { //food와 충돌했을 경우 
-        score += 10; //점수 증가 
+        score += 10; //점수 증가
+        
         food(); //새로운 food 추가 
         length++; //길이증가 
         x[length - 1] = x[length - 2]; //새로만든 몸통에 값 입력 
@@ -122,7 +123,7 @@ void move(int dir) {
 
     for (i = 1; i < length; i++) { //자기몸과 충돌했는지 검사 
         if (x[0] == x[i] && y[0] == y[i]) {
-            game_over();
+            life();
             return;
         }
     }
@@ -141,7 +142,7 @@ void move(int dir) {
     gotoxy(MAP_X + x[i], MAP_Y + y[i], "e"); 
     
     if (x[0] == 0 || x[0] == MAP_WIDTH - 1 || y[0] == 0 || y[0] == MAP_HEIGHT - 1) { //벽과 충돌했을 경우 
-        game_over();
+        life();
         return;
     }
 }
@@ -176,5 +177,13 @@ void food(void) {
         speed -= 3; //속도 증가 
         break;
 
+    }
+}
+
+void life() {
+    life_count -= 1;
+    reset();
+    if (life_count == 0) {
+        game_over();
     }
 }
