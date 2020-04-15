@@ -102,7 +102,7 @@ void game_over(void) { //게임종료 함수
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "+----------------------+");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, " YOUR SCORE : ");
  
-
+    printf("%d", score);
 
 
     Sleep(500);
@@ -154,7 +154,7 @@ void food(void) {
     int food_crush_on = 0;//food가 뱀 몸통좌표에 생길 경우 on 
     int r = 0; //난수 생성에 사동되는 변수 
     gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); //점수표시 
-
+    printf("%d", score);
 
     while (1) {
         food_crush_on = 0;
