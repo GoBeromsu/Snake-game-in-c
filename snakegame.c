@@ -59,14 +59,15 @@ int main() {
 
         }
         move(dir);
-        if (life_count < -2 ){
+        if (life_count < 0 ){
             system("cls");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 5, "+----------------------+");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 6, "|      Developer       |");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "|    Beomsu, Hye Won   |");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, "+----------------------+");
             draw_map();
-            break;
+
+            system("pause");
             
         }
 
