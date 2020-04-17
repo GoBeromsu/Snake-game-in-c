@@ -207,9 +207,7 @@ void life() {
     if (life_count == 0) {
         game_over();
     }
-    else if (life_count < -2) {
 
-    }
 }
 
 
