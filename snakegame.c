@@ -38,6 +38,7 @@ void food();
 void reset(void); 
 void draw_map();
 void move(int dir); 
+void pasue();
 
 int main() {
     reset();
