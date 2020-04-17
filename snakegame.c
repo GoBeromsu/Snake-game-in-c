@@ -16,14 +16,14 @@
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
 
-int x[100], y[100]; //x,y 좌표값을 저장 총 100개 
+int x[100], y[100]; //x,y 좌표값을 ?�??�?100�?
 
-int length; //몸길이를 기억 
-int speed; //게임 속도 
-int score; //점수 저장  --reset함수에 의해 초기화됨
+int length; //몸길?��? 기억 
+int speed; //게임 ?�도 
+int score; //?�수 ?�?? --reset?�수???�해 초기?�됨
 int food_x, food_y;
-int dir; //이동방향 저장 
-int key; //입력받은 키 저장 
+int dir; //?�동방향 ?�??
+int key; //?�력받�? ???�??
 int life_count = 3;
 int last_score = 0;
 
@@ -35,43 +35,42 @@ void gotoxy(int x, int y, const char* s) {
 
 void life();
 void food();
-void reset(void); //게임을 초기화 
+void reset(void); 
 void draw_map();
-void move(int dir); //뱀머리를 이동 
-void pause();
+void move(int dir); 
 
 int main() {
     reset();
 
     while (1) {
-        if (_kbhit()) do { key = _getch(); } while (key == 224); //키 입력받음
+        if (_kbhit()) do { key = _getch(); } while (key == 224); 
         Sleep(speed);
 
-        switch (key) { //입력받은 키를 파악하고 실행  
+        switch (key) {  
         case LEFT:
         case RIGHT:
         case UP:
         case DOWN:
             if ((dir == LEFT && key != RIGHT) || (dir == RIGHT && key != LEFT) || (dir == UP && key != DOWN) ||
-                (dir == DOWN && key != UP))//180회전이동을 방지하기 위해 필요. 
+                (dir == DOWN && key != UP))
                 dir = key;
-            key = 0; // 키값을 저장하는 함수를 reset 
+            key = 0;
             break;
-       case PAUSE: pause(); break; 
-	   case ESC: system("cls"); exit(0);   //ESC를 누르면 게임 종료 
+        case PAUSE: pause(); break;
+        case ESC: system("cls"); exit(0);  
 
         }
         move(dir);
-        if (life_count < 0 ){
+        if (life_count < 0) {
             system("cls");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "+----------------------+");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, "|      Developer       |");
             gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 9, "|    Beomsu, Hye Won   |");
-            gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 10, "+----------------------+");
+            gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 10,"+----------------------+");
             draw_map();
 
             system("pause");
-            life_count=3;
+            life_count = 3;
             reset();
         }
 
@@ -111,10 +110,10 @@ void reset(void) {
     gotoxy(MAP_X + x[0], MAP_Y + y[0], "e");
 
     food();
-    gotoxy(MAP_X+22, MAP_Y + MAP_HEIGHT, "YOUR LIFE: ");
+    gotoxy(MAP_X + 22, MAP_Y + MAP_HEIGHT, "YOUR LIFE: ");
     printf("%d", life_count);
 }
-void game_over(void) { //게임종료 함수 
+void game_over(void) { //게임종료 ?�수 
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "+----------------------+");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, "|      GAME OVER..     |");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 9, "+----------------------+");
@@ -124,22 +123,22 @@ void game_over(void) { //게임종료 함수
 
 
     Sleep(2000);
-	life_count--;
+    life_count--;
 
 }
 void move(int dir) {
     int i;
 
-    if (x[0] == food_x && y[0] == food_y) { //food와 충돌했을 경우 
-        score += 10; //점수 증가
+    if (x[0] == food_x && y[0] == food_y) { 
+        score += 10; 
 
-        food(); //새로운 food 추가 
-        length++; //길이증가 
-        x[length - 1] = x[length - 2]; //새로만든 몸통에 값 입력 
+        food(); 
+        length++; 
+        x[length - 1] = x[length - 2]; 
         y[length - 1] = y[length - 2];
     }
 
-    for (i = 1; i < length; i++) { //자기몸과 충돌했는지 검사 
+    for (i = 1; i < length; i++) { 
         if (x[0] == x[i] && y[0] == y[i]) {
             life();
             return;
@@ -159,7 +158,7 @@ void move(int dir) {
     if (dir == DOWN) ++y[0];
     gotoxy(MAP_X + x[i], MAP_Y + y[i], "e");
 
-    if (x[0] == 0 || x[0] == MAP_WIDTH - 1 || y[0] == 0 || y[0] == MAP_HEIGHT - 1) { //벽과 충돌했을 경우 
+    if (x[0] == 0 || x[0] == MAP_WIDTH - 1 || y[0] == 0 || y[0] == MAP_HEIGHT - 1) { 
         life();
         return;
     }
@@ -170,29 +169,29 @@ void move(int dir) {
 void food(void) {
     int i;
 
-    int food_crush_on = 0;//food가 뱀 몸통좌표에 생길 경우 on 
-    int r = 0; //난수 생성에 사동되는 변수 
-    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); //점수표시 
+    int food_crush_on = 0;
+    int r = 0; 
+    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); 
     printf("%d", score);
 
     while (1) {
         food_crush_on = 0;
-        srand((unsigned)time(NULL) + r); //난수표생성 
-        food_x = (rand() % (MAP_WIDTH - 2)) + 1;    //난수를 좌표값에 넣음 
+        srand((unsigned)time(NULL) + r); 
+        food_x = (rand() % (MAP_WIDTH - 2)) + 1; 
         food_y = (rand() % (MAP_HEIGHT - 2)) + 1;
 
-        for (i = 0; i < length; i++) { //food가 뱀 몸통과 겹치는지 확인  
+        for (i = 0; i < length; i++) {
             if (food_x == x[i] && food_y == y[i]) {
-                food_crush_on = 1; //겹치면 food_crush_on 를 on 
+                food_crush_on = 1; 
                 r++;
                 break;
             }
         }
 
-        if (food_crush_on == 1) continue; //겹쳤을 경우 while문을 다시 시작 
+        if (food_crush_on == 1) continue; 
 
-        gotoxy(MAP_X + food_x, MAP_Y + food_y, "♪"); //안겹쳤을 경우 좌표값에 food를 찍고 
-        speed -= 3; //속도 증가 
+        gotoxy(MAP_X + food_x, MAP_Y + food_y, "��");
+            speed -= 3;
         break;
 
     }
@@ -201,37 +200,36 @@ void food(void) {
 void life() {
     life_count -= 1;
     last_score += score;
-    gotoxy(MAP_X+22, MAP_Y + MAP_HEIGHT, "YOUR LIFE: ");
+    gotoxy(MAP_X + 22, MAP_Y + MAP_HEIGHT, "YOUR LIFE: ");
     printf("%d", life_count);
     reset();
     if (life_count == 0) {
         game_over();
     }
-    else if(life_count < -2){
-       
+    else if (life_count < -2) {
+
     }
 }
 
 
-void pause(void){ // 스페이스바를 눌렀을 경우 게임을 일시 정지 
-    while(1){
-        if(key==PAUSE){
-           
-            gotoxy(MAP_X+(MAP_WIDTH/2)-9,MAP_Y-1,"* PAUSE : PRESS ANY KEY TO RESUME *");
+void pause(void) {
+    while (1) {
+        if (key == PAUSE) {
+
+            gotoxy(MAP_X + (MAP_WIDTH / 2) - 9, MAP_Y - 1, "* PAUSE : PRESS ANY KEY TO RESUME *");
             Sleep(500);
         }
-        else{
+        else {
             draw_map();
             return;
-        } 
-        if(kbhit()){
-            gotoxy(MAP_X+(MAP_WIDTH/2)-9,MAP_Y-1,"                                    ");
-
-                do{
-                    key=getch();
-                }
-                while(key==224);
         }
-            
+        if (_kbhit()) {
+            gotoxy(MAP_X + (MAP_WIDTH / 2) - 9, MAP_Y - 1, "                                    ");
+
+            do {
+                key = _getch();
+            } while (key == 224);
+        }
+
     }
 }
